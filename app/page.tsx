@@ -2,6 +2,9 @@ import Image from "next/image";
 import { loginWithGoogle, signout } from "./login/actions";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import HomeLanding from "@/components/landing/home-landing";
+import HomeFooter from "@/components/footer/home-footer";
+import HowItWorks from "@/components/landing/how-it-works";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -10,12 +13,15 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   return (
-    <div>
-      <h1>Welcome to the Barbados RSPCA Adoption Information Portal</h1>
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-1">
+        <HomeLanding />
+      </main>
+      <HomeFooter />
       {user && <Link href={"/dashboard"}>Dashboard</Link>}
       <p>{user?.user_metadata.name}</p>
       <form>
-        {!user && <button formAction={loginWithGoogle}>Login</button>}
+        {/* {!user && <button formAction={loginWithGoogle}>Login</button>} */}
         {user && <button formAction={signout}>Sign Out</button>}
       </form>
     </div>
