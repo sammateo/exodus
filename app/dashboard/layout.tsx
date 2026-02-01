@@ -11,19 +11,15 @@ export default async function DashboardLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log("user", user);
   if (!user) {
     redirect("/login");
   }
-
-  console.log("user id", user.id);
 
   const { data: staff } = await supabase
     .from("staff_profiles")
     .select("id")
     .eq("id", user.id)
     .single();
-  console.log("staff", staff);
 
   if (!staff) {
     redirect("/");

@@ -1,10 +1,9 @@
-import Image from "next/image";
-import { loginWithGoogle, signout } from "./login/actions";
+import { signout } from "./login/actions";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import HomeLanding from "@/components/landing/home-landing";
 import HomeFooter from "@/components/footer/home-footer";
-import HowItWorks from "@/components/landing/how-it-works";
+import NavigationBar from "@/components/navigation/navigation-bar";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -15,6 +14,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
+        <NavigationBar />
         <HomeLanding />
       </main>
       <HomeFooter />

@@ -18,7 +18,7 @@ const HomeFooter = () => {
           </p>
 
           <a
-            href="#"
+            href="/registry"
             className="mt-8 inline-block rounded-full border border-indigo-600 px-12 py-3 text-sm font-medium text-indigo-600 hover:bg-indigo-600 hover:text-white"
           >
             Get Started
