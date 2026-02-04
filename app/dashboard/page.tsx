@@ -1,17 +1,47 @@
-import { createClient } from "@/lib/supabase/server";
+import { AnimalsPageProps } from "../registry/page";
+import { getAnimalsWithPhotos } from "../registry/action";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
+import RegistryFilter from "@/components/registry/registry-filter";
+import { Button } from "@/components/ui/button";
 
-export default async function DashboardPage() {
-  const supabase = await createClient();
+export default async function DashboardPage({
+  searchParams,
+}: AnimalsPageProps) {
+  const queries = await searchParams;
+  const filters = {
+    species: queries?.species as string | undefined,
+    status: queries?.status as
+      | "adoption"
+      | "found"
+      | "adopted"
+      | "reclaimed"
+      | undefined,
+    size: queries?.size as "small" | "medium" | "large" | undefined,
+    gender: queries?.gender as "male" | "female" | "unknown" | undefined,
+    age: queries?.age as string | undefined,
+  };
+  const animals = (await getAnimalsWithPhotos(filters)).flatMap((animal) =>
+    Array(20)
+      .fill(0)
+      .map(() => ({ ...animal })),
+  );
 
-  const { data: animals, error } = await supabase.from("animals").select("*");
-
-  if (error) {
-    console.error(error);
-  }
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p>Total animals: {animals?.length ?? 0}</p>
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <p>Total animals: {animals?.length ?? 0}</p>
+        </div>
+        <div>
+          <Button>New Animal</Button>
+        </div>
+      </div>
+      <div className="mx-auto py-10">
+        <RegistryFilter pageRoute="dashboard" />
+        <DataTable columns={columns} data={animals} />
+      </div>
     </div>
   );
 }

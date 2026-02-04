@@ -6,9 +6,13 @@ import { AnimalFilters } from "@/types/filter-types";
 
 interface AnimalFiltersProps {
   initialFilters?: AnimalFilters;
+  pageRoute?: "registry" | "dashboard";
 }
 
-export default function RegistryFilter({ initialFilters }: AnimalFiltersProps) {
+export default function RegistryFilter({
+  initialFilters,
+  pageRoute,
+}: AnimalFiltersProps) {
   const router = useRouter();
   const [filters, setFilters] = useState(initialFilters || {});
   const [isPending, startTransition] = useTransition();
@@ -22,7 +26,7 @@ export default function RegistryFilter({ initialFilters }: AnimalFiltersProps) {
       Object.entries({ ...filters, [key]: value }).forEach(([k, v]) => {
         if (v) searchParams.set(k, v);
       });
-      router.push(`/registry?${searchParams.toString()}`);
+      router.push(`/${pageRoute || "registry"}?${searchParams.toString()}`);
     });
   }
 
@@ -30,7 +34,7 @@ export default function RegistryFilter({ initialFilters }: AnimalFiltersProps) {
     setFilters({});
     // Trigger server-side update
     startTransition(() => {
-      router.push(`/registry`);
+      router.push(`${pageRoute || "/registry"}`);
     });
   };
   return (
