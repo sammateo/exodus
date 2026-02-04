@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import NavigationBar from "@/components/navigation/navigation-bar";
 
 export default async function DashboardLayout({
   children,
@@ -25,5 +26,10 @@ export default async function DashboardLayout({
     redirect("/");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <NavigationBar />
+      {children}
+    </>
+  );
 }

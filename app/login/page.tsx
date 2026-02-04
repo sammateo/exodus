@@ -1,14 +1,9 @@
-import { loginWithGoogle } from "./actions";
+import NavigationBar from "@/components/navigation/navigation-bar";
 
 export default function LoginPage() {
   return (
-    <form>
-      {/* <label htmlFor="email">Email:</label>
-      <input id="email" name="email" type="email" required />
-      <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" required /> */}
-      <button formAction={loginWithGoogle}>Log in</button>
-      {/* <button formAction={signup}>Sign up</button> */}
-    </form>
+    <div>
+      <NavigationBar />
+    </div>
   );
 }

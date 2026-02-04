@@ -12,7 +12,7 @@ const NavigationBar = async () => {
   return (
     <header className="bg-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4 sm:px-6 lg:px-8">
-        <Link className="block text-teal-600" href="/">
+        <Link className="block text-indigo-600" href="/">
           <span className="sr-only">Home</span>
           <img src={"/images/rspca_logo.jpg"} className="h-16" />
         </Link>
@@ -31,14 +31,25 @@ const NavigationBar = async () => {
               </li>
 
               <li>
-                <a
+                <Link
                   className="text-gray-500 transition hover:text-gray-500/75"
                   href="/report-animal"
                 >
                   {" "}
                   Report Found{" "}
-                </a>
+                </Link>
               </li>
+              {user && (
+                <li>
+                  <Link
+                    className="text-gray-500 transition hover:text-gray-500/75"
+                    href="/dashboard"
+                  >
+                    {" "}
+                    Dashboard{" "}
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
 
@@ -46,7 +57,7 @@ const NavigationBar = async () => {
             <form className="sm:flex sm:gap-4">
               {!user && (
                 <button
-                  className="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700"
+                  className="block rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700"
                   formAction={loginWithGoogle}
                 >
                   Login
@@ -55,7 +66,7 @@ const NavigationBar = async () => {
 
               {user && (
                 <button
-                  className="block rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75"
+                  className="block rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-indigo-600 transition hover:text-indigo-600/75"
                   formAction={signout}
                 >
                   Sign Out
