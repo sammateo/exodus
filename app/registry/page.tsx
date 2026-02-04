@@ -4,7 +4,7 @@ import { CiCalendar } from "react-icons/ci";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import RegistryFilter from "@/components/registry/registry-filter";
 import NavigationBar from "@/components/navigation/navigation-bar";
-interface AnimalsPageProps {
+export interface AnimalsPageProps {
   searchParams?: Record<string, string | string[]>;
 }
 const page = async ({ searchParams }: AnimalsPageProps) => {
