@@ -20,10 +20,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,15 +61,48 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
-
+  const [searchColumn, setSearchColumn] = useState<string>(
+    table.getAllColumns()[0].id,
+  );
   return (
     <div>
-      <div className="flex items-center pb-4">
+      <div className="flex items-center gap-1 pb-4">
+        <div className=" w-44">
+          <Select
+            name="column-names"
+            onValueChange={(value) => {
+              table.getAllColumns().forEach((col) => {
+                col.setFilterValue(null);
+              });
+              setSearchColumn(value);
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Columns" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Columns</SelectLabel>
+                {table.getAllColumns().map((col) => {
+                  //omit actions column
+                  if (col.id !== "actions")
+                    return (
+                      <SelectItem key={col.id} value={col.id}>
+                        {col.id}
+                      </SelectItem>
+                    );
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         <Input
-          placeholder="Filter names..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          placeholder={`Filter ${searchColumn}...`}
+          value={
+            (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn(searchColumn)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -117,24 +158,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div> */}
     </div>
   );
 }

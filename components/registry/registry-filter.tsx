@@ -57,6 +57,7 @@ export default function RegistryFilter({
         <option value="">All Status</option>
         <option value="adoption">Adoption</option>
         <option value="found">Found</option>
+        <option value="adopted">Aadopted</option>
       </select>
 
       <select

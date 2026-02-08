@@ -18,12 +18,6 @@ export default async function Home() {
         <HomeLanding />
       </main>
       <HomeFooter />
-      {user && <Link href={"/dashboard"}>Dashboard</Link>}
-      <p>{user?.user_metadata.name}</p>
-      <form>
-        {/* {!user && <button formAction={loginWithGoogle}>Login</button>} */}
-        {user && <button formAction={signout}>Sign Out</button>}
-      </form>
     </div>
   );
 }

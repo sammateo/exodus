@@ -18,6 +18,7 @@ export interface AnimalPhoto {
   id: string;
   animal_id: string;
   image_url: string;
+  file_path: string;
   created_at: string;
 }
 export interface StaffProfile {

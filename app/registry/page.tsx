@@ -1,6 +1,6 @@
 import { getAnimalsWithPhotos } from "./action";
 import { FaDog } from "react-icons/fa6";
-import { CiCalendar } from "react-icons/ci";
+import { CiCalendar, CiLocationOn } from "react-icons/ci";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import RegistryFilter from "@/components/registry/registry-filter";
 import NavigationBar from "@/components/navigation/navigation-bar";
@@ -74,7 +74,7 @@ const page = async ({ searchParams }: AnimalsPageProps) => {
                           {animal.age} | {animal.size}
                         </p>
 
-                        <p className="mt-4 line-clamp-2 text-sm text-pretty text-gray-700">
+                        <p className="mt-4 min-h-[calc(2*1.5rem)] line-clamp-2 text-sm text-pretty text-gray-700">
                           {animal.description}
                         </p>
                       </div>
@@ -82,16 +82,29 @@ const page = async ({ searchParams }: AnimalsPageProps) => {
 
                     <dl className="mt-6 flex gap-4 lg:gap-6">
                       {animal.status === "found" && (
-                        <div className="flex items-center gap-2">
-                          <dt className="text-gray-700">
-                            <span className="sr-only"> Published on </span>
+                        <div className="flex items-start gap-2">
+                          <div className="flex items-center gap-1">
+                            <dt className="text-gray-700">
+                              <span className="sr-only"> Found on </span>
 
-                            <CiCalendar className="size-5" />
-                          </dt>
+                              <CiCalendar className="size-5" />
+                            </dt>
 
-                          <dd className="text-xs text-gray-700">
-                            {animal.found_date}
-                          </dd>
+                            <dd className="text-xs text-gray-700">
+                              {animal.found_date}
+                            </dd>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <dt className="text-gray-700">
+                              <span className="sr-only"> Location found </span>
+
+                              <CiLocationOn className="size-5" />
+                            </dt>
+
+                            <dd className="text-xs text-gray-700">
+                              {animal.found_location}
+                            </dd>
+                          </div>
                         </div>
                       )}
 

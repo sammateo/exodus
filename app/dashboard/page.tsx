@@ -1,9 +1,10 @@
 import { AnimalsPageProps } from "../registry/page";
 import { getAnimalsWithPhotos } from "../registry/action";
-import { DataTable } from "./data-table";
+import { DataTable } from "../../components/data-table/data-table";
 import { columns } from "./columns";
 import RegistryFilter from "@/components/registry/registry-filter";
 import { Button } from "@/components/ui/button";
+import NewAnimalForm from "@/components/dashboard/new-animal-form";
 
 export default async function DashboardPage({
   searchParams,
@@ -21,11 +22,12 @@ export default async function DashboardPage({
     gender: queries?.gender as "male" | "female" | "unknown" | undefined,
     age: queries?.age as string | undefined,
   };
-  const animals = (await getAnimalsWithPhotos(filters)).flatMap((animal) =>
-    Array(20)
-      .fill(0)
-      .map(() => ({ ...animal })),
-  );
+  const animals = await getAnimalsWithPhotos(filters);
+  // .flatMap((animal) =>
+  //   Array(20)
+  //     .fill(0)
+  //     .map(() => ({ ...animal })),
+  // );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -35,7 +37,7 @@ export default async function DashboardPage({
           <p>Total animals: {animals?.length ?? 0}</p>
         </div>
         <div>
-          <Button>New Animal</Button>
+          <NewAnimalForm />
         </div>
       </div>
       <div className="mx-auto py-10">

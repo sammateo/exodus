@@ -18,7 +18,9 @@ export const TOAST_POSITION = "top-center";
 export const columns: ColumnDef<Animal>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title={"Name"} />;
+    },
   },
   {
     accessorKey: "species",
@@ -38,6 +40,12 @@ export const columns: ColumnDef<Animal>[] = [
     accessorKey: "age",
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title={"Age"} />;
+    },
+  },
+  {
+    accessorKey: "size",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title={"Size"} />;
     },
   },
   {
@@ -87,6 +95,17 @@ export const columns: ColumnDef<Animal>[] = [
               }}
             >
               Update animal
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => {
+                toast.error("deleting animal", {
+                  position: TOAST_POSITION,
+                });
+              }}
+            >
+              Delete animal
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
