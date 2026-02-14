@@ -35,7 +35,9 @@ const DeleteAnimalForm = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive">Delete animal</Button>
+        <Button className="w-full" variant="destructive">
+          Delete animal
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

@@ -11,7 +11,12 @@ export interface CreateAnimalActionState extends Omit<
 > {
   photo: File | undefined;
 }
-
+export interface UpdateAnimalActionState extends CreateAnimalActionState {
+  /**
+   * When true, the photo of the animal is being updated
+   */
+  update_photo: boolean;
+}
 export async function createAnimal(
   _: CreateAnimalActionState,
   formData: FormData,
@@ -114,10 +119,122 @@ export async function createAnimal(
   }
   return animal;
 }
-
-export async function deleteAnimal(animal_id: string) {
+export async function updateAnimal(
+  animalId: string,
+  _: UpdateAnimalActionState,
+  formData: FormData,
+): Promise<UpdateAnimalActionState> {
   const supabase = await createClient();
-  //remove photo from bucket
+
+  const animal: UpdateAnimalActionState = {
+    name: formData.get("animal-name")?.valueOf() as string,
+    species: formData.get("animal-species")?.valueOf() as string,
+    breed: formData.get("animal-breed")?.valueOf() as string,
+    gender: formData.get("animal-gender")?.valueOf() as
+      | "male"
+      | "female"
+      | "unknown"
+      | null,
+    age: formData.get("animal-age")?.valueOf() as string,
+    size: formData.get("animal-size")?.valueOf() as
+      | "small"
+      | "medium"
+      | "large"
+      | null,
+    description: formData.get("animal-description")?.valueOf() as string,
+    status: formData.get("animal-status")?.valueOf() as
+      | "adoption"
+      | "found"
+      | "adopted"
+      | "reclaimed",
+    found_location:
+      formData.get("animal-status")?.valueOf() === "found"
+        ? (formData.get("animal-found-location")?.valueOf() as string)
+        : null,
+    found_date:
+      formData.get("animal-status")?.valueOf() === "found"
+        ? (formData.get("animal-found-date")?.valueOf() as string)
+        : null,
+    is_public: true,
+    update_photo: (formData.get("animal-update-photo")?.valueOf() ===
+      "on") as boolean,
+    photo: formData.get("animal-photo")?.valueOf() as File | undefined,
+  };
+
+  const { photo, update_photo, ...animalDetails } = animal;
+
+  const { data, error } = await supabase
+    .from("animals")
+    .update([animalDetails])
+    .eq("id", animalId)
+    .select();
+
+  if (error) {
+    console.error(error);
+  }
+
+  if (data) {
+    if (update_photo) {
+      //delete current photo
+      await deleteAnimalPhotoFromStorage(animalId);
+
+      const savedAnimal = data[0] as Animal;
+      //upload image
+      if (photo && photo.size > 0) {
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("animal-photos")
+          .upload(
+            `${savedAnimal.id}/${animal.name}_photo.${photo.name.split(".").pop()}`,
+            photo as File,
+          );
+        if (uploadError) {
+          console.error(uploadError);
+        }
+        if (uploadData) {
+          console.log(`photo uploaded successfully for animal: ${animal.name}`);
+          // get image url
+          const { data: imageUrl } = supabase.storage
+            .from("animal-photos")
+            .getPublicUrl(uploadData.path);
+
+          console.log(
+            `image url retrieved successfully for animal: ${animal.name}`,
+          );
+
+          //save animal photo record
+          const { data: animalPhotoData, error: animalPhotoError } =
+            await supabase
+              .from("animal_photos")
+              .update([
+                {
+                  image_url: imageUrl.publicUrl,
+                  file_path: uploadData.path,
+                },
+              ])
+              .eq("animal_id", animalId)
+              .select();
+          if (animalPhotoError) {
+            console.error(animalPhotoError);
+          }
+          if (animalPhotoData) {
+            console.log(
+              `animal photo data updated successfully: ${animal.name}`,
+            );
+          }
+        }
+      }
+    }
+    //revalidate page
+    refresh();
+    revalidatePath("/dashboard");
+    redirect("/dashboard");
+  }
+  return animal;
+}
+
+const deleteAnimalPhotoFromStorage = async (animal_id: string) => {
+  const supabase = await createClient();
+
   //  get path
 
   let { data: animal_photos, error: animal_photos_error } = await supabase
@@ -148,6 +265,12 @@ export async function deleteAnimal(animal_id: string) {
       console.error(fileDeleteError);
     }
   }
+};
+
+export async function deleteAnimal(animal_id: string) {
+  const supabase = await createClient();
+  //remove photo from bucket
+  await deleteAnimalPhotoFromStorage(animal_id);
 
   //remove from animal photos
 

@@ -1,6 +1,7 @@
 "use client";
 
 import DeleteAnimalForm from "@/components/dashboard/delete-animal-form";
+import UpdateAnimalForm from "@/components/dashboard/update-animal-form";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -71,12 +72,9 @@ export const columns: ColumnDef<Animal>[] = [
           <DropdownMenuContent align="end" className="bg-white">
             <DropdownMenuItem
               onClick={() => {
-                toast.info(`viewing ${animal.name}`, {
-                  position: TOAST_POSITION,
-                });
-
                 redirect(`/registry/${animal.id}`);
               }}
+              className="text-center"
             >
               View animal
             </DropdownMenuItem>
@@ -86,8 +84,10 @@ export const columns: ColumnDef<Animal>[] = [
                   position: TOAST_POSITION,
                 });
               }}
+              asChild
             >
-              Update animal
+              <UpdateAnimalForm animal={animal} />
+              {/* Update animal */}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" asChild>

@@ -4,7 +4,10 @@ import { DataTable } from "../../components/data-table/data-table";
 import { columns } from "./columns";
 import RegistryFilter from "@/components/registry/registry-filter";
 import NewAnimalForm from "@/components/dashboard/new-animal-form";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 export default async function DashboardPage({
   searchParams,
 }: AnimalsPageProps) {

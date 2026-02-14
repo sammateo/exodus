@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Barbados RSPCA Registry",
+  title: {
+    template: "%s | Barbados RSPCA Registry",
+    default: "Barbados RSPCA Registry",
+  },
   description:
     "Browse animals available for adoption, see lost and found pets in your area, or report a stray you've found — all in one easy-to-use platform",
 };

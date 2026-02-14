@@ -2,9 +2,16 @@ import NavigationBar from "@/components/navigation/navigation-bar";
 import RegistryCardAlt from "@/components/registry/registry-card-alt";
 import RegistryFilter from "@/components/registry/registry-filter";
 import { getAnimalsWithPhotos } from "./action";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Registry",
+};
+
 export interface AnimalsPageProps {
   searchParams?: Record<string, string | string[]>;
 }
+
 const page = async ({ searchParams }: AnimalsPageProps) => {
   const queries = await searchParams;
   const filters = {
