@@ -6,7 +6,11 @@ import { AnimalFilters } from "@/types/filter-types";
 export async function getAnimals(filters?: AnimalFilters): Promise<Animal[]> {
   const supabase = await createClient();
 
-  let query = supabase.from("animals").select("*").eq("is_public", true);
+  let query = supabase
+    .from("animals")
+    .select("*")
+    .eq("is_public", true)
+    .order("created_at", { ascending: false });
 
   if (filters?.species) query = query.eq("species", filters.species);
   if (filters?.status) query = query.eq("status", filters.status);
@@ -35,7 +39,8 @@ export async function getAnimalsWithPhotos(filters?: AnimalFilters) {
       photos:animal_photos (*)
     `,
     )
-    .eq("is_public", true);
+    .eq("is_public", true)
+    .order("created_at", { ascending: false });
 
   if (filters?.species) query = query.eq("species", filters.species);
   if (filters?.status) query = query.eq("status", filters.status);
@@ -51,4 +56,29 @@ export async function getAnimalsWithPhotos(filters?: AnimalFilters) {
   }
 
   return data as AnimalWithPhotos[];
+}
+
+export async function getAnimalDetailsWithPhotos(id?: string) {
+  const supabase = await createClient();
+
+  let query = supabase
+    .from("animals")
+    .select(
+      `
+      *,
+      photos:animal_photos (*)
+    `,
+    )
+    .eq("is_public", true)
+    .eq("id", id)
+    .single();
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error(error);
+    return undefined;
+  }
+
+  return data as AnimalWithPhotos;
 }

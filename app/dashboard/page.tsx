@@ -3,7 +3,6 @@ import { getAnimalsWithPhotos } from "../registry/action";
 import { DataTable } from "../../components/data-table/data-table";
 import { columns } from "./columns";
 import RegistryFilter from "@/components/registry/registry-filter";
-import { Button } from "@/components/ui/button";
 import NewAnimalForm from "@/components/dashboard/new-animal-form";
 
 export default async function DashboardPage({
@@ -23,12 +22,6 @@ export default async function DashboardPage({
     age: queries?.age as string | undefined,
   };
   const animals = await getAnimalsWithPhotos(filters);
-  // .flatMap((animal) =>
-  //   Array(20)
-  //     .fill(0)
-  //     .map(() => ({ ...animal })),
-  // );
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       <div className="flex justify-between">

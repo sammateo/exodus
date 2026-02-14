@@ -1,5 +1,6 @@
 "use client";
 
+import DeleteAnimalForm from "@/components/dashboard/delete-animal-form";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +14,8 @@ import {
 import { Animal } from "@/types/data-types";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { redirect } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 export const TOAST_POSITION = "top-center";
 export const columns: ColumnDef<Animal>[] = [
@@ -56,9 +59,9 @@ export const columns: ColumnDef<Animal>[] = [
     id: "actions",
     cell: ({ row }) => {
       const animal = row.original;
-
+      const [isOpen, setIsOpen] = useState(false);
       return (
-        <DropdownMenu>
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -66,23 +69,13 @@ export const columns: ColumnDef<Animal>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-white">
-            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
-            {/* <DropdownMenuItem
-              onClick={() => {
-                navigator.clipboard.writeText(animal?.name || "");
-                toast.success("name copied", {
-                  position: TOAST_POSITION,
-                });
-              }}
-            >
-              Copy animal name
-            </DropdownMenuItem> */}
-            {/* <DropdownMenuSeparator /> */}
             <DropdownMenuItem
               onClick={() => {
-                toast.info("viewing animal", {
+                toast.info(`viewing ${animal.name}`, {
                   position: TOAST_POSITION,
                 });
+
+                redirect(`/registry/${animal.id}`);
               }}
             >
               View animal
@@ -97,15 +90,11 @@ export const columns: ColumnDef<Animal>[] = [
               Update animal
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={() => {
-                toast.error("deleting animal", {
-                  position: TOAST_POSITION,
-                });
-              }}
-            >
-              Delete animal
+            <DropdownMenuItem variant="destructive" asChild>
+              <DeleteAnimalForm
+                animal_id={animal.id}
+                setDropdownMenuOpen={setIsOpen}
+              />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
