@@ -81,7 +81,7 @@ const NavigationBar = async () => {
             </form>
             <Sheet>
               <SheetTrigger asChild>
-                <button className="block rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
+                <button className="block cursor-pointer rounded-sm bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
                   <span className="sr-only">Toggle menu</span>
                   <IoMdMenu className="size-5" />
                 </button>
@@ -89,7 +89,7 @@ const NavigationBar = async () => {
               <SheetContent>
                 <SheetHeader>
                   <SheetTitle>
-                    <Link className="block text-indigo-600" href="/">
+                    <Link className="block text-indigo-600 w-fit" href="/">
                       <span className="sr-only">Home</span>
                       <img src={"/images/rspca_logo.jpg"} className="h-16" />
                     </Link>

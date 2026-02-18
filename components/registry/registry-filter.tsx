@@ -1,8 +1,18 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { AnimalFilters } from "@/types/filter-types";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Button } from "../ui/button";
 
 interface AnimalFiltersProps {
   initialFilters?: AnimalFilters;
@@ -16,7 +26,7 @@ export default function RegistryFilter({
   const router = useRouter();
   const [filters, setFilters] = useState(initialFilters || {});
   const [isPending, startTransition] = useTransition();
-
+  const speciesRef = useRef<HTMLDivElement>(null);
   function updateFilter(key: string, value: string) {
     setFilters((prev) => ({ ...prev, [key]: value || undefined }));
 
@@ -30,71 +40,98 @@ export default function RegistryFilter({
     });
   }
 
+  useEffect(() => {
+    //update filters if initial filters changes
+    // happens on router.push with different params
+    setFilters(initialFilters || {});
+  }, [initialFilters]);
+
   const resetFilter = () => {
-    setFilters({});
+    // setFilters({
+    //   species: undefined,
+    // });
     // Trigger server-side update
     startTransition(() => {
       router.push(`${pageRoute || "/registry"}`);
     });
   };
+  console.log(filters);
   return (
     <div className="flex flex-wrap items-center gap-2 mb-6">
-      <select
-        value={filters.species || ""}
-        onChange={(e) => updateFilter("species", e.target.value)}
-        className="p-2 rounded"
+      <Select
+        onValueChange={(e) => updateFilter("species", e === "all" ? "" : e)}
+        value={filters.species || "all"}
       >
-        <option value="">All Species</option>
-        <option value="dog">Dog</option>
-        <option value="cat">Cat</option>
-      </select>
+        <SelectTrigger>
+          <SelectValue placeholder="All Species" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup ref={speciesRef}>
+            <SelectLabel>Species</SelectLabel>
+            <SelectItem value="all">All Species</SelectItem>
+            <SelectItem value="dog">Dog</SelectItem>
+            <SelectItem value="cat">Cat</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-      <select
-        value={filters.status || ""}
-        onChange={(e) => updateFilter("status", e.target.value)}
-        className="p-2 rounded"
+      <Select
+        onValueChange={(e) => updateFilter("status", e === "all" ? "" : e)}
+        value={filters.status || "all"}
       >
-        <option value="">All Status</option>
-        <option value="adoption">Adoption</option>
-        <option value="found">Found</option>
-        <option value="adopted">Aadopted</option>
-      </select>
+        <SelectTrigger>
+          <SelectValue placeholder="All Status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Status</SelectLabel>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="adoption">Adoption</SelectItem>
+            <SelectItem value="found">Found</SelectItem>
+            <SelectItem value="adopted">Adopted</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-      <select
-        value={filters.size || ""}
-        onChange={(e) => updateFilter("size", e.target.value)}
-        className="p-2 rounded"
+      <Select
+        onValueChange={(e) => updateFilter("size", e === "all" ? "" : e)}
+        value={filters.size || "all"}
       >
-        <option value="">All Sizes</option>
-        <option value="small">Small</option>
-        <option value="medium">Medium</option>
-        <option value="large">Large</option>
-      </select>
+        <SelectTrigger>
+          <SelectValue placeholder="All Sizes" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Sizes</SelectLabel>
+            <SelectItem value="all">All Sizes</SelectItem>
+            <SelectItem value="small">Small</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="large">Large</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-      <select
-        value={filters.gender || ""}
-        onChange={(e) => updateFilter("gender", e.target.value)}
-        className="p-2 rounded"
+      <Select
+        onValueChange={(e) => updateFilter("gender", e === "all" ? "" : e)}
+        value={filters.gender || "all"}
       >
-        <option value="">All Genders</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="unknown">Unknown</option>
-      </select>
+        <SelectTrigger>
+          <SelectValue placeholder="All Genders" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Genders</SelectLabel>
+            <SelectItem value="all">All Genders</SelectItem>
+            <SelectItem value="male">Male</SelectItem>
+            <SelectItem value="female">Female</SelectItem>
+            <SelectItem value="unknown">Unknown</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-      <button className="underline" onClick={resetFilter}>
+      <Button variant="outline" onClick={resetFilter}>
         Reset
-      </button>
-      {/* <select
-        value={filters.age || ""}
-        onChange={(e) => updateFilter("age", e.target.value)}
-        className="border p-2 rounded"
-      >
-        <option value="">All Ages</option>
-        <option value="puppy">Puppy/Kitten</option>
-        <option value="adult">Adult</option>
-        <option value="senior">Senior</option>
-      </select> */}
+      </Button>
 
       {isPending && <span className="ml-2 text-gray-500">Updating...</span>}
     </div>

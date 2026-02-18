@@ -45,7 +45,7 @@ const page = async ({ searchParams }: AnimalsPageProps) => {
             </p>
             <span>{animals?.length ?? 0} animal(s)</span>
           </header>
-          <RegistryFilter />
+          <RegistryFilter initialFilters={filters} />
           <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {animals &&
               animals.map((animal) => (

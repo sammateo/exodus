@@ -11,6 +11,7 @@ import { BiSolidPyramid } from "react-icons/bi";
 import { IoCalendarNumberOutline } from "react-icons/io5";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { GrLocation } from "react-icons/gr";
+import Image from "next/image";
 
 const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
@@ -30,7 +31,9 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:items-center md:gap-8">
           <div className="h-96">
             {animal.photos && animal.photos.length > 0 ? (
-              <img
+              <Image
+                width={400}
+                height={384}
                 src={animal.photos[0].image_url}
                 className="rounded object-cover h-full w-full"
                 alt={`photo-${animal.name}`}
