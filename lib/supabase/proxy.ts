@@ -41,7 +41,6 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims;
 
-  console.log(request.nextUrl.pathname);
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
