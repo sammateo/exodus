@@ -41,11 +41,13 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims;
 
+  console.log(request.nextUrl.pathname);
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
     !request.nextUrl.pathname.startsWith("/auth") &&
-    !["/", "/registry", "/report-animal"].includes(request.nextUrl.pathname) //allow public pages without auth
+    !request.nextUrl.pathname.startsWith("/registry") &&
+    !["/", "/report-animal"].includes(request.nextUrl.pathname) //allow public pages without auth
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
