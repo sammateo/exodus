@@ -22,7 +22,7 @@ const NavigationBar = async () => {
       url: "/registry",
     },
     {
-      label: "Report Found",
+      label: "Make a Report",
       url: "/report-animal",
     },
     {

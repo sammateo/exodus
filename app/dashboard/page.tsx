@@ -5,6 +5,8 @@ import { columns } from "./columns";
 import RegistryFilter from "@/components/registry/registry-filter";
 import NewAnimalForm from "@/components/dashboard/new-animal-form";
 import { Metadata } from "next";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export const metadata: Metadata = {
   title: "Dashboard",
 };
@@ -32,12 +34,15 @@ export default async function DashboardPage({
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p>Total animals: {animals?.length ?? 0}</p>
         </div>
-        <div>
+        <div className="flex gap-2 flex-wrap">
+          <Link href={"/dashboard/reports"}>
+            <Button variant="outline">View Reports</Button>
+          </Link>
           <NewAnimalForm />
         </div>
       </div>
       <div className="mx-auto py-10">
-        <RegistryFilter pageRoute="dashboard" />
+        <RegistryFilter initialFilters={filters} pageRoute="dashboard" />
         <DataTable columns={columns} data={animals} />
       </div>
     </div>

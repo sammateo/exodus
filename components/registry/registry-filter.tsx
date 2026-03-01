@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { AnimalFilters } from "@/types/filter-types";
+import { AnimalFilters, AnimalReportFilters } from "@/types/filter-types";
 import {
   Select,
   SelectContent,
@@ -15,8 +15,8 @@ import {
 import { Button } from "../ui/button";
 
 interface AnimalFiltersProps {
-  initialFilters?: AnimalFilters;
-  pageRoute?: "registry" | "dashboard";
+  initialFilters?: AnimalFilters | AnimalReportFilters;
+  pageRoute?: "registry" | "dashboard" | "dashboard/reports";
 }
 
 export default function RegistryFilter({
@@ -52,7 +52,7 @@ export default function RegistryFilter({
     // });
     // Trigger server-side update
     startTransition(() => {
-      router.push(`${pageRoute || "/registry"}`);
+      router.push(`/${pageRoute || "registry"}`);
     });
   };
   console.log(filters);

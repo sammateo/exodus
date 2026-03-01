@@ -5,7 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { validate as validateUUID } from "uuid";
-import { getAnimalDetailsWithPhotos } from "../action";
+import { getAnimalReportDetailsWithPhotos } from "../action";
 
 const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
@@ -14,18 +14,17 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     redirect("/registry");
   }
 
-  const animal = await getAnimalDetailsWithPhotos(slug);
+  const animal = await getAnimalReportDetailsWithPhotos(slug);
   if (!animal) {
     return <div></div>;
   }
   return (
     <section>
-      <NavigationBar />
       <AnimalDisplay animal={animal} />
-      <Link href={"/registry"}>
+      <Link href={"/dashboard/reports"}>
         <Button className="mx-auto w-fit flex items-center gap-2">
           <FaArrowLeftLong />
-          <span>Back to Registry</span>
+          <span>Back to Reports</span>
         </Button>
       </Link>
     </section>
